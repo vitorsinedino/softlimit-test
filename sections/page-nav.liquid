@@ -1,0 +1,129 @@
+{% if section.settings.link_list %}
+  <div class="centered-menu">
+    <nav>
+      <ul>
+        {% for link in linklists[section.settings.link_list].links %}
+          <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
+{% else %}
+  <p>Please select a link list in the section settings.</p>
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Page Nav",
+    "settings": [
+      {
+        "id": "link_list",
+        "type": "link_list",
+        "label": "Select a link list"
+      }
+    ],
+    "presets": [
+    {
+      "name": "Page Nav"
+    }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+  .centered-menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.centered-menu a {
+  color: #000;
+  text-decoration: none;
+}
+
+.centered-menu ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style-type: none;
+    padding: 2rem 0;
+    margin: 0;
+}
+  
+.centered-menu li {
+    padding: .5rem 2rem;
+    border: 1px solid;
+    border-radius: 1rem 1rem 0 0;
+}
+  
+/* Style for the active state */
+.centered-menu .active {
+    font-weight: 700;
+    text-decoration: none;
+    color: #000;
+}
+
+/* Styles for mobile layout */
+@media screen and (max-width: 768px) {
+  .centered-menu nav ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .centered-menu nav ul li {
+    margin-bottom: 1rem;
+  }
+}
+{% endstylesheet %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Initial call to set the active link based on the current URL
+  updateActiveLink();
+
+  // Add click event
+  document.addEventListener('click', function(e) {
+    if (e.target.tagName === 'A' && e.target.closest('.centered-menu')) {
+      e.preventDefault(); // Prevent the default navigation behavior
+      const targetUrl = e.target.href; // Get the URL from the href attribute directly
+      fetchContent(targetUrl);
+      history.pushState(null, null, targetUrl); // Update the URL in the address bar
+      updateActiveLink(); // Update the active link based on the new URL
+    }
+  });
+});
+
+function updateActiveLink() {
+  const currentUrl = new URL(window.location.href);
+  const currentHandle = currentUrl.pathname.split('/').pop(); // Extract the last part of the URL path
+  
+  document.querySelectorAll('.centered-menu a').forEach(function(link) {
+    const linkUrl = new URL(link.href);
+    const linkHandle = linkUrl.pathname.split('/').pop();
+    
+    if (linkHandle === currentHandle) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+}
+
+function fetchContent(url) {
+  fetch(url)
+    .then(function(response) {
+      return response.text();
+    })
+    .then(function(html) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const content = doc.querySelector('#MainContent').innerHTML; // Use the specific selector for the content wrapper
+      document.getElementById('MainContent').innerHTML = content;
+      updateActiveLink(); 
+    })
+    .catch(function(err) {
+      console.warn('Error loading content:', err);
+    });
+}
+</script>
