@@ -1,1 +1,21 @@
-{"sections":{"main":{"type":"main-page","settings":{"padding_top":28,"padding_bottom":28}}},"order":["main"]}
+{
+    "sections": {
+      "81a42dbd-bfbc-42fc-92f0-a82d5bc4be90": {
+        "type": "page-nav",
+        "settings": {
+          "link_list": "page-navigation"
+        }
+      },
+      "main": {
+        "type": "main-page",
+        "settings": {
+          "padding_top": 28,
+          "padding_bottom": 28
+        }
+      }
+    },
+    "order": [
+      "81a42dbd-bfbc-42fc-92f0-a82d5bc4be90",
+      "main"
+    ]
+  }
