@@ -66,14 +66,16 @@
 
 /* Styles for mobile layout */
 @media screen and (max-width: 768px) {
-  .centered-menu nav ul {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .centered-menu nav ul li {
+    .centered-menu nav ul {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        min-width: 100vw;
+        text-align: center;
+    }
+    .centered-menu nav ul li {
     margin-bottom: 1rem;
-  }
+    }
 }
 {% endstylesheet %}
 
